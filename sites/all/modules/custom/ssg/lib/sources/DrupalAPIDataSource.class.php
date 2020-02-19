@@ -37,16 +37,16 @@ class DrupalAPIDataSource extends DataSource
       {
 		// JKH default to last 12 hours, and set 'since'
         // $timeSince = strtotime('-12 hours');
+        // for deleting deleted items...
         $timeSince = strtotime('-5 year');
         $query = [
           'page_size'=>$batchSize,
           'page'=>$currentPage,
           'since'=>$timeSince
         ];
-        // JKH commented out for test...        
-        if ( !empty(intval($since)) ) {
-             $this->log("\nLOADING since(".date('Y/m/d H:i:s',$since).")");
-             $query['since'] = intval($since);
+        // JKH only change if value > 0...  
+        if ( !empty(intval($since)) && intval($since)>0 ) {
+			$query['since'] = intval($since);
         }
 
         $this->log("\nLOADING since(".date('Y/m/d H:i:s',$query['since']).")");
@@ -359,6 +359,9 @@ class DrupalAPIDataSource extends DataSource
 
     $server = $this->ssg->config['drupalAPI']['server'];
     $url    = $this->ssg->config['drupalAPI']['redirectsUrl'];
+    
+    // JKH wtf is going on here.
+    // tracetofile(__FILE__,__LINE__,"server " . $server . ", uri " . $url);
 
     $this->redirects = [];
     
@@ -396,6 +399,10 @@ class DrupalAPIDataSource extends DataSource
       return false;
     }
     $responseData = json_decode($body,true);
+    // JKH wtf
+    // tracetofile(__FILE__,__LINE__,"** response data");
+    // traceobjects($responseData);
+    // tracetofile(__FILE__,__LINE__,"** end response data");
 
     foreach( $responseData['result'] as $result )
     {

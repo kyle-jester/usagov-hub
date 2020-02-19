@@ -16,6 +16,7 @@ jQuery(document).ready(function (){
     });
 
     // creating the navigation tree for the iframe
+    // #tree is the jstree in the frame to the left
     jQuery('#tree').jstree({
         'core' : {
             'data' : {
@@ -30,13 +31,13 @@ jQuery(document).ready(function (){
         
     })
 
-    //changing iframe location based on selection
+    // changing iframe location based on selection
     jQuery('#tree').on("select_node.jstree", function (e, data){
     	// JKH added 
 		// console.log("dimmy, why you do this to me?");
+		// #tree is the jstree in the frame to the left
         var term_id = data.node.id;
         var currentUrl = jQuery('#frame').attr('src');
-
         
         currentUrl = currentUrl.replace('/taxonomy/term/', '');
         currentUrl = currentUrl.replace('/edit?hideHeader=1', '');
@@ -49,24 +50,28 @@ jQuery(document).ready(function (){
             // console.log('after');
         }        
     });
-
+        
     // load new term page in iframe when user clicks 'create' button on left nav area               
     function create_term(){
+    	// JKH note, #tree is the jstree in the frame to the left with complete list
         var ref = jQuery('#tree').jstree(true),
         sel = ref.get_selected();
         if(!sel.length) { return false; }
-        term_id=sel[0];
+        term_id = sel[0];
         sel = sel[0];
-        
-
+        // JKH note, #frame contains window on the right that hosts the add/edit taxonomy UI
         jQuery('#frame').hide();
         jQuery('#frame').attr('src', '/admin/structure/taxonomy/site_strucutre_taxonomy/add?hideHeader=1');
         jQuery('#frame').show();
         // JKH attempting fix a.indexOf is not a function
         // jQuery('#frame').load(function() {
         jQuery('#frame').on('load', function() {
-            jQuery('#frame').contents().find('#edit-parent').val(term_id);
-        });  
+        	console.log("create term frame loaded for term id " + term_id);
+            // JKH note, #parent-term is the jstree in the iframe document to the right, 
+            // it identifies the taxonomy term parent for an item being edited or created
+            // it is not always loaded when this function is called, so this needs further work
+			jQuery('#frame').contents().find('#edit-parent').val(term_id);
+        }); 
     }
 
     function getHeight(){

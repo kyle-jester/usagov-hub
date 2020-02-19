@@ -410,7 +410,12 @@ function _ssg_build_and_deploy_site( &$site )
     /// if there is no data, it should be pulled
     _ssgUpdateBuildStatus($site->uuid,'0 loadData');
     $site->log("Start building site\n",false);
-    $site->loadData();
+    // JKH added 
+    if(!$site->loadData()) {
+        $site->log("loadData() fails\n",false);
+        _ssgUpdateBuildStatus($site->uuid,'6 failed');
+        return;    
+    }
 
     /// we should always use existing templates
     /// existing templates should be freshened here
@@ -431,6 +436,7 @@ function _ssg_build_and_deploy_site( &$site )
     _ssgUpdateBuildStatus($site->uuid,'3 renderSite');
     $site->renderSite();
 
+	// JKH I don't know why site validation was not done in previous effort
     /// TEMP - don't even bother running validation
     _ssgUpdateBuildStatus($site->uuid,'4 validateSite');
     // if ( $site->validateSite() )
@@ -676,11 +682,12 @@ function ssg_cronapi ()
 
 function _ssg_cleanup ()
 {
+	// JKH correct SQL error '6 complete' below was 6 complete' missing first '
     $result = db_query("
         UPDATE {ssg_builds} 
         SET state='6 shutdown'
         WHERE 
-            state NOT IN ( '6 failed', 6 complete', '6 shutdown' )
+            state NOT IN ( '6 failed', '6 complete', '6 shutdown' )
             AND 
             ( UNIX_TIMESTAMP() - updated ) > 1800
     ");

@@ -1,7 +1,6 @@
 <?php
 // JKH 
 // setupAssetTopicEvents question, again...
-// require_once DRUPAL_ROOT . "/tracetofile.php";
 
 function asset_topic_placement_init() {
 	// JKH added to figure out why setupAssetTopicEvents is not defined...

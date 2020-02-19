@@ -45,6 +45,9 @@ class S3SiteDestination
         // $this->s3Pull = "{$inlineEnv} aws s3 sync {$this->dest} {$this->source} --delete";
 
         // echo "aws s3 sync {$this->source} {$this->dest} --delete --exclude \"/analytics/raw-data/*\""."\n";
+        
+        // JKH for debug
+		$this->log("copying from " . $this->source . ", to " . $this->dest . "\n", false);
 
         $this->s3Sync = "aws s3 sync {$this->source} {$this->dest} --delete --acl public-read";
         $this->s3Pull = "aws s3 sync {$this->dest} {$this->source} --delete";

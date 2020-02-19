@@ -70,14 +70,13 @@ jQuery(document).ready(function(){
                 "checkbox"
             ]
         }).on('ready.jstree', function () {
-            //get selected parent and forces that selection on tree
-            var existing_asset_id=jQuery('select#edit-parent option[selected="selected"]').val();
-			// JKH added 
-			console.log('ready.jstree');
+            // get selected parent value
+            var parent_asset_id=jQuery('select#edit-parent option[selected="selected"]').val();
             initial_click = true;
-            jQuery('#parent-term').jstree(true).select_node(existing_asset_id);
 			// JKH added 
-			console.log('select node ' + existing_asset_id);            
+			console.log('ready.jstree parent id ' + parent_asset_id); 
+			// make parent selection on #parent-term 
+            jQuery('#parent-term').jstree(true).select_node(parent_asset_id);
 
             //remove currently edited term from the list in the tree
             var currentTermId = '';
@@ -87,25 +86,22 @@ jQuery(document).ready(function(){
                 currentTermId = currentTermId.replace('/edit', '');
                 jQuery('#parent-term').jstree(true).hide_node(currentTermId);
 				// JKH added 
-				console.log('hide current term id ' + currentTermId);                
+				console.log('hide current term id ' + currentTermId); 
             }
         });
 
         //updating parent using the select tree
         jQuery('#parent-term').on("select_node.jstree", function (e, data){
 			// JKH added 
-			console.log('on(select_node.jstree)');        
+			console.log('on(select_node.jstree)');
             if(initial_click == false) {
-                var term_id = data.node.id;
+                var term_id = data.node.id;                
                 if(term_id.length > 0) {
-
                     jQuery('select#edit-parent option').each(function(){
                         jQuery(this).prop('selected',false);
                     });
-
                     var selector = 'select#edit-parent option[value="' + term_id + '"]';
-
-                    jQuery(selector).trigger( "click" ).prop('selected',true).trigger('change');
+                    jQuery(selector).trigger("click").prop('selected',true).trigger('change');
                     // JKH added 
                     console.log('triggered click for term id ' + term_id);
                 }

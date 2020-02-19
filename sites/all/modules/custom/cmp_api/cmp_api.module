@@ -106,6 +106,8 @@ function api_landing_page(){
 
 function _cmp_api_get_all_redirects(){
     $ret = array();
+    // JKH shouldn't this be selecting on override = 1??
+    // I'm going to try it..., made no difference ... WHERE override = 1
     $res = db_query("SELECT * FROM match_redirect");
     foreach($res as $r){
         $red_obj = match_redirect_load($r->rid);

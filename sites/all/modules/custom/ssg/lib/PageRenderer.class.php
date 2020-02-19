@@ -107,10 +107,16 @@ class PageRenderer
 
     public function renderPage(&$page)
     {
+    	//  JKH let's see wtf is going on here
+    	// tracetofile(__FILE__,__LINE__,"** page object");
+    	// traceobjects($page);
+    	// tracetofile(__FILE__,__LINE__,"** end page object");
         /// this needs to fail better
         $paths = [];
         /// PATH
+        // tracetofile(__FILE__,__LINE__,"getting uri");
         $url = $this->getPageUrl($page);
+        // tracetofile(__FILE__,__LINE__,"uri " . $url);
         if (empty($url)) {
             /// not renderable
             $this->log("UnRenderable: no url for {$page['name']} {$page['friendly_url']}\n");
@@ -152,8 +158,8 @@ class PageRenderer
                     $this->log($msg);
                     return false;
                 } elseif ($this->runtimeEnvironment() == 'standalone') {
-                    // $msg = "Write SUCCESS\nPath:".$file." \nType: ".$page['pageType']." \nName: ".$page['name']."\n";
-                    // $this->log($msg);                
+                    $msg = "Write SUCCESS\nPath:".$file." \nType: ".$page['pageType']." \nName: ".$page['name']."\n";
+                    $this->log($msg);                
                 }    
             }
             $this->log(preg_replace('/(\<br \/\>|\n)/', '', $msg)."\n");
@@ -168,6 +174,9 @@ class PageRenderer
             return null;
         }
         $html = $twig->render($pageParams);
+        // JKH figuring it out
+        // tracetofile(__FILE__,__LINE__,"**html for render...\n" . $url. "\n" . substr($html,0,80));
+        
         $html = trim($html);
         if (!empty($html)) {
             /// directory for path
@@ -183,8 +192,8 @@ class PageRenderer
                 $this->log($msg);
                 return false;
             } elseif ($this->runtimeEnvironment() == 'standalone') {
-                // $msg = "Write SUCCESS\nPath:".$file." \nType: ".$page['pageType']." \nName: ".$page['name']."\n";
-                // $this->log($msg);                
+                $msg = "Write SUCCESS\nPath:".$file." \nType: ".$page['pageType']." \nName: ".$page['name']."\n";
+                $this->log($msg);                
             }
         } else {
             if (!file_exists($fileDir)) {
@@ -201,8 +210,8 @@ class PageRenderer
                     $this->log($msg);
                     return false;
                 } else {
-                    // $msg = "Write SUCCESS\nPath:".$file." \nType: ".$page['pageType']." \nName: ".$page['name']."\n";
-                    // $this->log($msg);                
+                    $msg = "Write SUCCESS\nPath:".$file." \nType: ".$page['pageType']." \nName: ".$page['name']."\n";
+                    $this->log($msg);                
                 }
             }
             $this->log(preg_replace('/(\<br \/\>|\n)/', '', $msg)."\n");
@@ -241,8 +250,8 @@ class PageRenderer
                         $this->log($msg);
                         return false;
                     } elseif ($this->runtimeEnvironment() == 'standalone') {
-                        // $msg = "Write SUCCESS\nPath:".$file." \nType: ".$page['pageType']." \nName: ".$page['name']."\n";
-                        // $this->log($msg);                
+                        $msg = "Write SUCCESS\nPath:".$file." \nType: ".$page['pageType']." \nName: ".$page['name']."\n";
+                        $this->log($msg);                
                     }
                     array_unshift($paths, $path.'/'.strtolower($letter));
                 } else {
@@ -260,8 +269,8 @@ class PageRenderer
                             $this->log($msg);
                             return false;
                         } elseif ($this->runtimeEnvironment() == 'standalone') {
-                            // $msg = "Write SUCCESS\nPath:".$file." \nType: ".$page['pageType']." \nName: ".$page['name']."\n";
-                            // $this->log($msg);                
+                            $msg = "Write SUCCESS\nPath:".$file." \nType: ".$page['pageType']." \nName: ".$page['name']."\n";
+                            $this->log($msg);                
                         }
                     }
                     $this->log(preg_replace('/(\<br \/\>|\n)/', '', $msg)."\n");
@@ -435,6 +444,10 @@ class PageRenderer
 
     public function renderRedirect($redirect)
     {
+    	// JKH wtf is going on here?
+    	// tracetofile(__FILE__,__LINE__,"** redirect");
+    	// traceobjects($redirect);
+    	// tracetofile(__FILE__,__LINE__,"** end redirect");
         $path = trim($redirect['source_path'], '/ ');
         $path = str_replace(' ','',$path);
         $path = strtolower($path);
@@ -660,7 +673,8 @@ class PageRenderer
                 continue;
             }
             $path = $file->getPathname();
-            // echo "LOADING TEMPLATE : $path\n";
+            // JKH 
+            // tracetofile(__FILE__,__LINE__,"LOADING TEMPLATE : " . $path );
             $name = basename($path, '.twig');
             if ('yml' == pathinfo($path, PATHINFO_EXTENSION)) {
                 continue;
