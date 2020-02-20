@@ -49,7 +49,7 @@ class DrupalAPIDataSource extends DataSource
 			$query['since'] = intval($since);
         }
 
-        $this->log("\nLOADING since(".date('Y/m/d H:i:s',$query['since']).")");
+        $this->log("\nLOADING since(".date('Y/m/d H:i:s',$query['since']).") from {$server}{$url}");
         $body = file_get_contents(
           "{$server}{$url}",
           FALSE,
@@ -71,35 +71,11 @@ class DrupalAPIDataSource extends DataSource
           return false;
         }
         $responseData = json_decode($body,true);
-        /*
-        $client   = new \GuzzleHttp\Client(['base_uri' => $server, 'verify' => false]);
-        $query = [
-          'page_size'=>$batchSize,
-          'page'=>$currentPage
-        ];
-        if ( !empty(intval($since)) ) {
-          $this->log("\nLOADING since(".date('Y/m/d H:i:s',$since).")");
-          $query['since'] = intval($since);
-        }
 
-        $this->log("\nLOADING batch($currentPage/$totalPages) ");
-        $response = $client->post( $url, [ 'form_params'=> $query ] );
-        $body = $response->getBody();
-        if ( empty($body) )
-        {
-          echo "EMPTY REPSONSE\n";
-          continue;
-        }
-        $responseData = json_decode($body->getContents(),true);
-        if ( $response->getStatusCode()!==200 )
-        {
-          break;
-        }
-        */
       } catch (\Exception $e) {
       	// JKH changing obscure 'ERRORS' message, and use of die
       	$exception = sprintf("%s\n",$e->getMessage());
-      	printf("%s",$exception);
+      	// printf("%s",$exception);
       	$this->log($exception);
         return false;
       }

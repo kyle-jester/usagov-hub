@@ -1211,7 +1211,7 @@ class StaticSiteGenerator
         }
 
         /// copy over static files - to one location
-        // $this->log("Rendering: static files\n");
+        $this->log("Rendering: static files\n");
         $staticDestBaseDirs = [
             "{$this->siteDir}"
         ];
@@ -1222,7 +1222,7 @@ class StaticSiteGenerator
         }
         foreach ( $staticDirs as $sourceDir )
         {
-            $this->log("Rendering: static files from /{$this->config['templateSync']['repo_static_base']}/{$sourceDir}\n");
+            $this->log("Rendering now : static files from /{$this->config['templateSync']['repo_static_base']}/{$sourceDir}\n");
             foreach ( $staticDestBaseDirs as $destBaseDir )
             {
                 if ( $sourceDir == '*' )
@@ -1233,7 +1233,7 @@ class StaticSiteGenerator
                     $fromDir = "{$this->templates->sourceStaticDir}/{$sourceDir}";
                     $intoDir   = "{$destBaseDir}/{$sourceDir}";
                 }
-
+				$this->log("Rendering from $fromDir to $intoDir\n");
                 if ( is_dir($fromDir) )
                 {
                     $this->prepareDir($intoDir);
