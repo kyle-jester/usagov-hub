@@ -47,18 +47,58 @@ class DataSource
 
     public function loadData()
     {
-		$success = false;
-		// JKH previous versions of this function would both load from source,
-		// then update ... look at the old git code, and figure out how to do one or the other
-		// and because the deletes are not working, i'm just going to load from source every time...
-		$this->log("Data: loading fresh from source, every time ... ");
-		if ( $this->loadDataFromSource() ) 
-		{
-			$this->log("done\n");
-			$success = true;
-		} 
-		
-		return $success;
+        $success = false;
+        $sourceFail = false;
+        // JKH look at the comment below, I don't think that this question was answered....
+        // so because the deletes are not working, for the time being I'm just going 
+        // to put a flag here so that it updates every time...
+        if ($this->freshData)
+        {
+            /// if we want data from source - we might only need to update
+            /// how do we know if we want totally new data or just updated
+            $this->log("Data: loading fresh from source ... ");
+            if ( $this->loadDataFromSource() ) 
+            {
+                $this->log("done\n");
+                $success = true;
+            } else {
+            	$sourceFail = true;
+            }
+        }
+
+        $this->log("Data: loading from cache ... ");
+        if ($this->loadDataFromCache()) 
+        { 
+            $this->log("done\n");
+            $success = true;
+        } else {
+            $this->log("not found\n");
+            if (!$sourceFail)
+            {   
+                $this->log("Data: loading from source ... ");
+                if ( $this->loadDataFromSource() ) 
+                {
+                    $this->log("done\n");
+                    $success = true;
+                } else {
+                    $this->log("fail\n");
+                }
+            }
+        }
+
+        if ($this->updateData)
+        {
+            $this->log("Data: updating\n");
+            if ( $this->updateDataFromSource() ) 
+            {
+                $this->log("Data: updating ... done\n");
+                $success = true;
+            } else {
+                $this->log("Data: updating ... fail\n");
+            }
+        }
+        
+        return $success;
     }
     
     public function updateDataFromSource()
