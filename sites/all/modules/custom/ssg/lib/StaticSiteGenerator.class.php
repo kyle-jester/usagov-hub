@@ -183,6 +183,8 @@ class StaticSiteGenerator
         $this->pages           = [];
         $this->pagesByUrl      = [];
         $this->sitePage        = [];
+        // JKH 
+        // why are these commented out!?
         // $this->homePage     = null;
         // $this->topicsPage   = null;
         $this->pageTypes       = [];
@@ -690,6 +692,9 @@ class StaticSiteGenerator
                 $this->sitePage[$fub] = $this->source->entities[$this->sitePage['uuid']];
             }
         }
+        // 
+        // JKH is this where the homePage is built? 
+        // it is commented out!
         // if ( !empty($this->homePage) && !empty($this->homePage['uuid']) )
         // {
         //     $this->homePage   = $this->source->entities[$this->homePage['uuid']];

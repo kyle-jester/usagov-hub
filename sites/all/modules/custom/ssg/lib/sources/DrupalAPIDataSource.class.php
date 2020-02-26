@@ -44,10 +44,6 @@ class DrupalAPIDataSource extends DataSource
           'page'=>$currentPage,
           'since'=>$timeSince
         ];
-        // JKH only change if value > 0...  
-        if ( !empty(intval($since)) && intval($since)>0 ) {
-			$query['since'] = intval($since);
-        }
 
         $this->log("\nLOADING since(".date('Y/m/d H:i:s',$query['since']).") from {$server}{$url}");
         $body = file_get_contents(
