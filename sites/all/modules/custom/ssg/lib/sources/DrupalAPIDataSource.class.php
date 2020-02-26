@@ -38,7 +38,7 @@ class DrupalAPIDataSource extends DataSource
 		// JKH default to last 12 hours, and set 'since'
         // $timeSince = strtotime('-12 hours');
         // for deleting deleted items...
-        $timeSince = strtotime('-5 year');
+        $timeSince = strtotime('-1 year');
         $query = [
           'page_size'=>$batchSize,
           'page'=>$currentPage,
