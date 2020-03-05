@@ -48,12 +48,11 @@ class DataSource
 
     public function loadData()
     {
-        $success    = false;
+        $retcode    = false;
         $sourceFail = false;
         // JKH look at the comment below, I don't think that this question was answered....
-        // so because the deletes are not working, for the time being I'm just going 
-        // to put a flag here so that it updates every time...
-        if ( $this->freshData || true)
+        // so because the deletes are not working, very complicated in this code base...
+        if ( $this->freshData )
         {
             /// if we want data from source - we might only need to update
             /// how do we know if we want totally new data or just updated
@@ -61,6 +60,7 @@ class DataSource
             if ( $this->loadDataFromSource() ) 
             {
                 $this->log("done\n");
+                $retcode = true;
             } else {
                 $sourceFail = true;
             }
@@ -70,7 +70,7 @@ class DataSource
         if ( $this->loadDataFromCache()  ) 
         { 
             $this->log("done\n");
-            $success = true;
+            $retcode = true;
         } else {
             $this->log("not found\n");
             if ( !$sourceFail )
@@ -79,6 +79,7 @@ class DataSource
                 if ( $this->loadDataFromSource() ) 
                 {
                     $this->log("done\n");
+                    $retcode = true;
                 } else {
                     $this->log("fail\n");
                 }
@@ -91,14 +92,13 @@ class DataSource
             if ( $this->updateDataFromSource() ) 
             {
                 $this->log("Data: updating ... done\n");
-                return true;
+                $retcode = true;
             } else {
                 $this->log("Data: updating ... fail\n");
-                return false;
             }
         }
         
-        return true;
+        return $retcode;
     }
     public function updateDataFromSource()
     {
