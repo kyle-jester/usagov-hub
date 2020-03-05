@@ -35,21 +35,21 @@ class DrupalAPIDataSource extends DataSource
       $loadStartTime = microtime(true);
       try
       {
-		// JKH default to last 12 hours, and set 'since'
-        // $timeSince = strtotime('-12 hours');
-        $timeSince = strtotime('-5 year');
+		  // JKH default to last 12 hours, and set 'since'
+        $timeSince = strtotime('-12 hours');
+        // $timeSince = strtotime('-5 year');
         $query = [
           'page_size'=>$batchSize,
           'page'=>$currentPage,
           'since'=>$timeSince
         ];
-        // JKH commented out for test...        
-        if ( !empty(intval($since)) ) {
-             $this->log("\nLOADING since(".date('Y/m/d H:i:s',$since).")");
+        // JKH $since has default value of 0        
+        if ( !empty($since) && $since > 0) {
+             $this->log("\nLOADING passed since(".date('Y/m/d H:i:s',$since).")");
              $query['since'] = intval($since);
+        } else {
+        		$this->log("\nLOADING 12hrs since(".date('Y/m/d H:i:s',$query['since']).")");
         }
-
-        $this->log("\nLOADING since(".date('Y/m/d H:i:s',$query['since']).")");
         $body = file_get_contents(
           "{$server}{$url}",
           FALSE,
